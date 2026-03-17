@@ -1,6 +1,6 @@
-# Qwen3.5 LLM Serving Project
+# Qwen3.5 LLM 서버
 
-이 프로젝트는 Qwen3.5-35B-A3B 모델을 Windows 환경에서 고성능으로 서빙하기 위한 스크립트들을 포함하고 있습니다.
+Qwen3.5-35B-A3B 모델을 Windows 환경에서 고성능으로 서빙하기 위한 스크립트입니다.
 
 ## 주요 파일
 
