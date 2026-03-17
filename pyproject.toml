@@ -1,0 +1,13 @@
+[project]
+name = "win-qwen-serve"
+version = "0.1.0"
+description = "윈도우를 위한 고성능 QWEN 서빙"
+readme = "README.md"
+requires-python = ">=3.10"
+dependencies = [
+    "huggingface-hub>=0.24.0",
+]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
