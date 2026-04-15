@@ -2,38 +2,30 @@
 
 Qwen3.5-35B-A3B 모델을 Windows 환경에서 고성능으로 서빙하기 위한 스크립트입니다.
 
-## 주요 파일
-
-### 1. `serve_qwen.py`
-`llama-cpp-python` 기반의 `llama-server` 바이너리를 사용하여 Qwen3.5 모델을 OpenAI 호환 API 서버로 실행하는 메인 스크립트입니다.
-
-#### 주요 특징
+## 주요 특징
 - **Windows 최적화**: Windows 환경에서 CUDA 가속을 사용하는 Standalone 바이너리(`llama-server.exe`)를 실행합니다.
 - **자동 모델 다운로드**: HuggingFace(`unsloth/Qwen3.5-35B-A3B-GGUF`)에서 GGUF 모델을 자동으로 다운로드합니다.
 - **병렬 처리**: `--parallel` 설정을 통해 여러 요청을 동시에 처리할 수 있습니다. (기본값: 10)
 - **Thinking 기능 제어**: Qwen3.5의 'thinking' 기능에 적당한 Budget을 설정하여 추론 성능과 대화 응답 속도를 조절할 수 있습니다.
 
-#### 설치 방법
+## 설치 방법
 **바이너리**: `./llama-server/` 폴더 내에 `llama-server.exe` 및 필요한 DLL 파일들이 있어야 합니다.  
 (Claude Code 등을 이용해 설치하세요. [doc/llama_install_prompt.md](./doc/llama_install_prompt.md) 문서의 프롬프트 참고)  
 이 설치 이후 아래 실행 방법의 명령어를 입력하면 됩니다.
 
-#### 실행 방법
+## 실행 방법
 ```bash
 uv run serve_qwen.py
 ```
 
-#### 주요 설정 (스크립트 내 수정 가능)
+## 주요 설정 (스크립트 내 수정 가능)
 - `PORT`: 서버 포트 (기본값: 17722)
 - `N_GPU_LAYERS`: GPU 오프로드 레이어 수 (기본값: -1, 전체 GPU 사용)
-- `N_CTX`: 컨텍스트 길이 (기본값: 65536)
-- `N_PARALLEL`: 동시 요청 처리 수 (기본값: 10)
+- `N_CTX`: 컨텍스트 길이 (기본값: 524288)
+- `N_PARALLEL`: 동시 요청 처리 수 (기본값: cpu코어수)
 - `THINKING_BUDGET`: 추론(Reasoning) 예산 (기본값: 16384)
 
-### 2. `test_server.py`
-작동 중인 서버에 요청을 보내 응답을 확인하는 테스트 스크립트입니다.
-
-#### 실행 방법
+## 테스트 실행 방법
 ```bash
 uv run test_server.py
 ```
