@@ -31,8 +31,8 @@ MODEL_DIR = Path("./models")
 HOST = "0.0.0.0"
 PORT = 17722
 N_GPU_LAYERS = -1       # -1 = 전체 GPU 오프로드
-N_CTX = 65536            # 컨텍스트 길이
-N_PARALLEL = 10          # 동시 요청 처리 수
+N_CTX = 524288           # 컨텍스트 길이
+N_PARALLEL = os.cpu_count() or 10  # 동시 요청 처리 수 (CPU 코어 수 기반)
 CHAT_FORMAT = "chatml"  # Qwen 채팅 포맷
 THINKING_BUDGET = 16384
 # ─────────────────────────────────────────────────────
@@ -74,7 +74,7 @@ def serve(model_path: Path):
     print("사용 예시 (curl):")
     print(f'  curl http://localhost:{PORT}/v1/chat/completions \\')
     print('    -H "Content-Type: application/json" \\')
-    print(f'    -d \'{{"model": "qwen",')
+    print(f'    -d \'{{"model": "qwen3.5-35b-a3b-q4_k_m",')
     print('          "messages": [{"role": "user", "content": "안녕하세요"}],')
     print('          "max_tokens": 512}\'')
     print("=" * 60)
