@@ -1,10 +1,15 @@
 import requests
 import json
+import sys
+
+# Windows 콘솔에서 UTF-8 출력을 지원하도록 설정
+if sys.stdout.encoding != 'utf-8':
+    sys.stdout.reconfigure(encoding='utf-8')
 
 url = "http://localhost:17722/v1/chat/completions"
 headers = {"Content-Type": "application/json"}
 data = {
-    "model": "qwen",
+    "model": "qwen3.6-35b-a3b-ud-q4_k_m",
     "messages": [
         {"role": "user", "content": "안녕하세요. 반갑습니다. 간단하게 인사해줘."}
     ],

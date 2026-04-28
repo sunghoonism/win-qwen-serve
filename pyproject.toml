@@ -6,8 +6,12 @@ readme = "README.md"
 requires-python = ">=3.10"
 dependencies = [
     "huggingface-hub>=0.24.0",
+    "requests",
 ]
 
 [build-system]
 requires = ["hatchling"]
 build-backend = "hatchling.build"
+
+[tool.uv]
+package = false

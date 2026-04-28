@@ -1,5 +1,5 @@
 """
-llama-cpp-python 서버를 이용한 Qwen3.5-35B-A3B 서빙 스크립트
+llama-cpp-python 서버를 이용한 Qwen3.6-35B-A3B 서빙 스크립트
 - Windows 지원
 - 동시 요청 처리 (--n-parallel)
 - OpenAI 호환 API
@@ -22,10 +22,13 @@ import subprocess
 from pathlib import Path
 from huggingface_hub import hf_hub_download
 
+# Avoid Xet-backed download issues on some Windows setups.
+os.environ.setdefault("HF_HUB_DISABLE_XET", "1")
+
 
 # ── 설정 ──────────────────────────────────────────────
-MODEL_REPO = "unsloth/Qwen3.5-35B-A3B-GGUF"
-MODEL_FILE = "Qwen3.5-35B-A3B-Q4_K_M.gguf"
+MODEL_REPO = "unsloth/Qwen3.6-35B-A3B-GGUF"
+MODEL_FILE = "Qwen3.6-35B-A3B-UD-Q4_K_M.gguf"
 MODEL_DIR = Path("./models")
 
 HOST = "0.0.0.0"
@@ -42,17 +45,16 @@ def download_model() -> Path:
     """HuggingFace에서 GGUF 모델 다운로드"""
     model_path = MODEL_DIR / MODEL_FILE
     if model_path.exists():
-        print(f"✓ 모델 파일이 이미 존재합니다: {model_path}")
         return model_path
 
-    print(f"⬇ 모델 다운로드 중: {MODEL_REPO}/{MODEL_FILE}")
-    print("  (최초 1회만 실행됩니다. 약 20GB)")
+    print(f"[DOWNLOAD] Downloading model: {MODEL_REPO}/{MODEL_FILE}")
+    print("  (first run only, about 22GB)")
     downloaded = hf_hub_download(
         repo_id=MODEL_REPO,
         filename=MODEL_FILE,
         local_dir=str(MODEL_DIR),
     )
-    print(f"✓ 다운로드 완료: {downloaded}")
+    print(f"[DONE] Download complete: {downloaded}")
     return Path(downloaded)
 
 
@@ -65,17 +67,17 @@ def serve(model_path: Path):
     os.environ["PATH"] = f"{server_dir};{os.environ.get('PATH', '')}"
 
     print("=" * 60)
-    print(f"  llama-server 시작 (Standalone Binary)")
-    print(f"  모델: {MODEL_FILE}")
-    print(f"  동시 요청 수: {N_PARALLEL}")
+    print("  llama-server starting (Standalone Binary)")
+    print(f"  model: {MODEL_FILE}")
+    print(f"  parallel requests: {N_PARALLEL}")
     print(f"  API: http://{HOST}:{PORT}")
     print("=" * 60)
     print()
-    print("사용 예시 (curl):")
+    print("Example request (curl):")
     print(f'  curl http://localhost:{PORT}/v1/chat/completions \\')
     print('    -H "Content-Type: application/json" \\')
-    print(f'    -d \'{{"model": "qwen3.5-35b-a3b-q4_k_m",')
-    print('          "messages": [{"role": "user", "content": "안녕하세요"}],')
+    print(f'    -d \'{{"model": "qwen3.6-35b-a3b-ud-q4_k_m",')
+    print('          "messages": [{"role": "user", "content": "Hello"}],')
     print('          "max_tokens": 512}\'')
     print("=" * 60)
 
